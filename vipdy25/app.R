@@ -27,13 +27,21 @@ ui <- fluidPage(
                         "Number of bins:",
                         min = 1,
                         max = 100,
-                        value = 30)
+                        value = 30),
+            numericInput("sel_day",
+                         "Select a number to return a day",
+                         min = "1",
+                         max = "7",
+                         value = "1")
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
           
           tabsetPanel(id = "tabs",
+                      
+                      tabPanel("Ugedag",
+                               uiOutput("day")),
                       
                       tabPanel("Hej",
                                plotOutput("distPlot")
@@ -46,6 +54,19 @@ ui <- fluidPage(
 
 # Define server logic required to draw a histogram
 server <- function(input, output) {
+  
+  output$day <- renderUI({
+    
+    library(bslib)
+    library(bsicons)
+    
+    bslib::value_box(title = "Den valgte dag er:",
+                     value = input$sel_day,
+                     showcase = bs_icon("bank2"),
+                     theme = "bg-danger")
+    
+  }) 
+  
 
     output$distPlot <- renderPlot({
         # generate bins based on input$bins from ui.R
