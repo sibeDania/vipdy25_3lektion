@@ -10,6 +10,8 @@
 library(shiny)
 library(shinythemes)
 
+#day_model <- readRDS("model/day.Rds")
+
 # Define UI for application that draws a histogram
 ui <- fluidPage(
 
@@ -55,13 +57,22 @@ ui <- fluidPage(
 # Define server logic required to draw a histogram
 server <- function(input, output) {
   
+  day <- reactive({
+    
+    day <- readRDS("model/day.Rds")
+    
+    day(input$sel_day)
+    
+  })
+  
   output$day <- renderUI({
+    
     
     library(bslib)
     library(bsicons)
     
     bslib::value_box(title = "Den valgte dag er:",
-                     value = input$sel_day,
+                     value = day(),
                      showcase = bs_icon("bank2"),
                      theme = "bg-danger")
     
